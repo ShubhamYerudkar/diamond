@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valuation Result</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Josefin+Sans:wght@200;300;400&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0f0e0c;
+            --surface: #1a1814;
+            --surface2: #211f19;
+            --gold-accent: #d4a843;
+            --gold-light: rgba(212,168,67,0.15);
+            --white: #f5f0e8;
+            --heading: #faf6ee;
+            --muted: #a09880;
+            --border: rgba(212,168,67,0.25);
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--white);
+            font-family: 'Josefin Sans', sans-serif;
+            font-weight: 300;
+            min-height: 100vh;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image:
+                linear-gradient(135deg, rgba(212,168,67,0.05) 25%, transparent 25%),
+                linear-gradient(225deg, rgba(212,168,67,0.05) 25%, transparent 25%),
+                linear-gradient(315deg, rgba(212,168,67,0.05) 25%, transparent 25%),
+                linear-gradient(45deg,  rgba(212,168,67,0.05) 25%, transparent 25%);
+            background-size: 80px 80px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .page-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 720px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            padding: 40px 20px;
+            text-align: center;
+        }
+
+        /* ── HEADER ── */
+        header {
+            width: 100%;
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeDown 0.9s ease both;
+        }
+
+        .eyebrow {
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 12px;
+            font-weight: 400;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: var(--gold-accent);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+        .eyebrow::before, .eyebrow::after {
+            content: '';
+            width: 40px; height: 1px;
+            background: var(--gold-accent);
+            opacity: 0.5;
+        }
+
+        h1 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 300;
+            letter-spacing: 0.04em;
+            line-height: 1.15;
+            color: var(--heading);
+            text-align: center;
+        }
+        h1 em {
+            font-style: italic;
+            color: var(--gold-accent);
+        }
+
+        /* ── GEM ICON ── */
+        .gem-icon {
+            width: 52px; height: 52px;
+            margin: 0 auto 20px;
+            display: block;
+            filter: drop-shadow(0 0 18px rgba(201,168,76,0.4));
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { filter: drop-shadow(0 0 14px rgba(201,168,76,0.3)); }
+            50%       { filter: drop-shadow(0 0 28px rgba(201,168,76,0.65)); }
+        }
+
+        /* ── CARD ── */
+        .card {
+            width: 100%;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 48px 36px;
+            animation: fadeUp 1s ease 0.2s both;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            box-shadow: 0 32px 80px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--gold-accent), transparent);
+        }
+
+        /* ── PRICE ── */
+        .value-label {
+            font-size: 12px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        .price-block {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+
+        .price-amount {
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: clamp(2.4rem, 6vw, 4.2rem);
+            font-weight: 400;
+            letter-spacing: 0.02em;
+            color: var(--gold-accent);
+            line-height: 1.1;
+            text-align: center;
+            word-break: break-word;
+            animation: revealPrice 0.8s ease 0.7s both;
+        }
+
+        .price-currency {
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 13px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        @keyframes revealPrice {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .price-underline {
+            height: 1px;
+            margin: 20px auto 0;
+            width: 70%;
+            background: linear-gradient(90deg, transparent, var(--gold-accent), transparent);
+            opacity: 0.5;
+        }
+
+        /* ── DIVIDER ── */
+        .ornament {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin: 24px auto;
+            color: var(--gold-accent);
+            opacity: 0.6;
+        }
+        .ornament::before, .ornament::after {
+            content: '';
+            width: 50px; height: 1px;
+            background: var(--gold-accent);
+            opacity: 0.4;
+        }
+        .ornament-dot {
+            width: 4px; height: 4px;
+            border-radius: 50%;
+            background: var(--gold-accent);
+        }
+
+        /* ── CAPTION ── */
+        .caption {
+            font-size: 13px;
+            letter-spacing: 0.1em;
+            line-height: 1.8;
+            color: var(--muted);
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        /* ── BUTTON ── */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin: 32px auto 0;
+            background: transparent;
+            border: 1px solid rgba(212,168,67,0.6);
+            color: var(--gold-accent);
+            font-family: 'Josefin Sans', sans-serif;
+            font-size: 12px;
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            padding: 16px 34px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: color 0.35s;
+            border-radius: 2px;
+            text-decoration: none;
+        }
+
+        .btn-back::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: var(--gold-accent);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.35s ease;
+            z-index: 0;
+        }
+
+        .btn-back:hover { color: #0f0e0c; }
+        .btn-back:hover::before { transform: scaleX(1); }
+        .btn-back span { position: relative; z-index: 1; }
+
+        @keyframes fadeDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 36px 20px; }
+            .btn-back { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+
+    <header>
+        <svg class="gem-icon" viewBox="0 0 52 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="26,4 46,18 40,46 12,46 6,18" fill="none" stroke="#d4a843" stroke-width="1.2"/>
+            <polygon points="26,4 46,18 26,14" fill="rgba(212,168,67,0.25)"/>
+            <polygon points="26,4 6,18 26,14" fill="rgba(212,168,67,0.18)"/>
+            <polygon points="26,14 46,18 40,46 12,46 6,18" fill="rgba(212,168,67,0.12)"/>
+            <line x1="26" y1="14" x2="40" y2="46" stroke="#d4a843" stroke-width="0.6" opacity="0.6"/>
+            <line x1="26" y1="14" x2="12" y2="46" stroke="#d4a843" stroke-width="0.6" opacity="0.6"/>
+            <line x1="26" y1="14" x2="26" y2="46" stroke="#d4a843" stroke-width="0.6" opacity="0.6"/>
+            <line x1="6" y1="18" x2="46" y2="18" stroke="#d4a843" stroke-width="0.6" opacity="0.6"/>
+        </svg>
+
+        <div class="eyebrow">Valuation Complete</div>
+        <h1>Estimated<br><em>Market Value</em></h1>
+    </header>
+
+    <div class="card">
+
+        <p class="value-label">Your Diamond is Worth</p>
+
+        <div class="price-block">
+            <!-- Formats to 2 decimal places in Jinja if a float is passed -->
+            <div class="price-amount">₹{{ "%.2f"|format(final_result|float) if final_result is number or (final_result|string)|float(default=0) != 0 else final_result }}</div>
+            <div class="price-currency">Indian Rupees &nbsp;·&nbsp; INR</div>
+        </div>
+
+        <div class="price-underline"></div>
+
+        <div class="ornament">
+            <div class="ornament-dot"></div>
+            <div class="ornament-dot"></div>
+            <div class="ornament-dot"></div>
+        </div>
+
+        <p class="caption">
+            Calculated using carat, cut, clarity<br>colour &amp; dimensional proportions
+        </p>
+
+        <a href="/" class="btn-back"><span>Value Another Diamond</span></a>
+
+    </div>
+
+</div>
+
+</body>
+</html>
